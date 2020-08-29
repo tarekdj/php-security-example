@@ -5,19 +5,28 @@ jobs:
       - image: circleci/php:latest
     steps:
       - checkout
-      - run: sudo apt update # PHP CircleCI 2.0 Configuration File# PHP CircleCI 2.0 Configuration File sudo apt install zlib1g-dev libsqlite3-dev
+      - run: sudo apt update
       - run: sudo docker-php-ext-install zip
       - run: composer install
-      - run: echo "Done"
+      # Fake build.
+      - run: echo "Build finished"
 
   security:
     docker:
       - image: circleci/php:latest
     steps:
       - checkout
-      - run: sudo apt update # PHP CircleCI 2.0 Configuration File# PHP CircleCI 2.0 Configuration File sudo apt install zlib1g-dev libsqlite3-dev
+      - run: sudo apt update
       - run: sudo docker-php-ext-install zip
       - run: composer require --dev roave/security-advisories:dev-master
+
+  deploy:
+    machine:
+        enabled: true
+    steps:
+      - checkout
+      # Fake deploy
+      - run: echo "deploy finished"
 
 workflows:
   version: 2
@@ -27,3 +36,6 @@ workflows:
       - security:
           requires:
             - build
+      - deploy:
+          requires:
+            - security
